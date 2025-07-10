@@ -43,6 +43,13 @@ pipeline {
         }
 
         stage('Build Application') {
+            agent {
+                docker {
+                    image 'python:3.9-slim-buster' // Use a Python image that includes pip
+                    // You might need 'args '-u 0'' if permissions issues arise inside the container,
+                    // but often not needed for simple pip installs.
+                }
+            }
             steps {
                 script {
                     // --- Choose ONE of the following build steps based on your application type ---
