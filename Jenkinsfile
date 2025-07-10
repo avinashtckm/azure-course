@@ -76,7 +76,7 @@ stage('Docker Build and Push') {
                         // This uses a Service Principal to log into Azure CLI, then gets ACR credentials
                         // Ensure 'az' is installed on your Jenkins agent.
                         sh """
-                        echo "${AZURE_SP_JSON}" > azure-sp.json
+                        echo ${AZURE_SP_JSON} > azure-sp.json
                         az login --service-principal -u $(jq -r .clientId azure-sp.json) -p $(jq -r .clientSecret azure-sp.json) --tenant $(jq -r .tenantId azure-sp.json)
                         rm azure-sp.json # Clean up sensitive file
 
