@@ -65,7 +65,7 @@ pipeline {
             }
         }
 
-        stage('Docker Build and Push') {
+stage('Docker Build and Push') {
             steps {
                 script {
                     // Log in to Azure Container Registry
@@ -75,14 +75,14 @@ pipeline {
                         // Azure CLI login for ACR
                         // This uses a Service Principal to log into Azure CLI, then gets ACR credentials
                         // Ensure 'az' is installed on your Jenkins agent.
-                        // sh """
+                        sh """
                         echo "${AZURE_SP_JSON}" > azure-sp.json
                         az login --service-principal -u $(jq -r .clientId azure-sp.json) -p $(jq -r .clientSecret azure-sp.json) --tenant $(jq -r .tenantId azure-sp.json)
                         rm azure-sp.json # Clean up sensitive file
 
                         # Get ACR login credentials and login Docker daemon
                         az acr login --name ${ACR_LOGIN_SERVER}
-                        """
+                        """ // <-- This closing """ was unmatched or the opening was commented.
                     }
 
                     // Build the Docker image
@@ -98,7 +98,7 @@ pipeline {
             }
         }
 
-        stage('Deploy to AKS') {
+stage('Deploy to AKS') {
             steps {
                 script {
                     // Configure kubectl to connect to your AKS cluster
@@ -106,13 +106,13 @@ pipeline {
                     // Ensure 'az' and 'kubectl' are installed on your Jenkins agent.
                     withCredentials([string(credentialsId: "${env.AZURE_CREDENTIAL_ID}", variable: 'AZURE_SP_JSON')]) {
                         sh """
-                        echo \$AZURE_SP_JSON > azure-sp.json
+                        echo "${AZURE_SP_JSON}" > azure-sp.json
                         az login --service-principal -u $(jq -r .clientId azure-sp.json) -p $(jq -r .clientSecret azure-sp.json) --tenant $(jq -r .tenantId azure-sp.json)
                         rm azure-sp.json # Clean up sensitive file
 
                         # Get AKS credentials
                         az aks get-credentials --resource-group ${AKS_RESOURCE_GROUP} --name ${AKS_CLUSTER_NAME} --overwrite-existing
-                        """
+                        """ // <-- This closing """ was unmatched or the opening was commented.
                     }
 
                     // Replace image placeholder in Kubernetes manifests
