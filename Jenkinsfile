@@ -59,7 +59,7 @@ pipeline {
                     // sh 'npm run build' // If you have a build script
 
                     // Example: Python application (with pip requirements.txt)
-                     sh 'pip install -r requirements.txt'
+                     sh 'pip install -r aks/k8s/requirements.txt'
                     // sh 'python setup.py build' // If you have a setup.py
 
                     // Example: Java Maven application
