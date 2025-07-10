@@ -48,6 +48,7 @@ pipeline {
                     image 'python:3.9-slim-buster' // Use a Python image that includes pip
                     // You might need 'args '-u 0'' if permissions issues arise inside the container,
                     // but often not needed for simple pip installs.
+                    args '-u 0'
                 }
             }
             steps {
